@@ -28,6 +28,7 @@ func (h HttpServer) Start() {
 		h.initialize()
 	}
 	bongs, _ = bong.LoadBongs("bongs/duckduckgo-v260.yaml")
+	http.HandleFunc("/", index)
 	http.HandleFunc("/search", search)
 
 	addr := ":" + strconv.Itoa(h.Port)
@@ -35,6 +36,16 @@ func (h HttpServer) Start() {
 	fmt.Println("Starting http server at port", h.Port)
 	if err := http.ListenAndServe(addr, nil); err != nil {
 		panic(err)
+	}
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+	data := hg.IndexParams{
+		Title: "bong",
+	}
+
+	if err := hg.Index(w, data); err != nil {
+		fmt.Println(err)
 	}
 }
 
