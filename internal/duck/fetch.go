@@ -20,18 +20,18 @@ var (
 	bangAddrRegexp, _ = regexp.Compile(bangAddrExpr)
 )
 
-func Fetch() (string, error) {
+func fetch() ([]byte, error) {
 	r, err := http.Get(duck + latestBangAddr())
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	respData, err := io.ReadAll(r.Body)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
-	return string(respData), nil
+	return respData, nil
 }
 
 func latestBangVersion() int {

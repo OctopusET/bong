@@ -6,7 +6,7 @@ import (
 )
 
 func TestFetch(t *testing.T) {
-	_, err := Fetch()
+	_, err := fetch()
 
 	if err != nil {
 		panic(err)
