@@ -20,9 +20,7 @@ func toCollection(bongs []Bong) BongCollection {
 	bc := newBongCollection()
 
 	for _, b := range bongs {
-		title := b.Title
-		b.Title = ""
-		bc.Bongs[title] = b
+		bc.Bongs[b.Bongus] = b
 	}
 
 	return bc
