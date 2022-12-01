@@ -2,6 +2,7 @@ package duck
 
 import (
 	"encoding/json"
+	"strings"
 
 	"github.com/npmania/bong/internal/bong"
 )
@@ -22,12 +23,12 @@ func parseRawBang(raw []byte) (bangs []DuckBang, err error) {
 }
 
 func fixBangs(bangs []DuckBang) (fixed []DuckBang) {
-	for _, wrongb := range bangs {
-		fixedb := wrongb
-		if string(wrongb.Title[0]) == " " {
-			fixedb.Title = fixedb.Title[1:]
+	for _, b := range bangs {
+		if string(b.Title[0]) == " " {
+			b.Title = b.Title[1:]
 		}
-		fixed = append(fixed, fixedb)
+		b.BangUrl = strings.Replace(b.BangUrl, "{{{s}}}", "%s", 1)
+		fixed = append(fixed, b)
 	}
 	return
 }
