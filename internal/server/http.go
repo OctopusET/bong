@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 
+	"github.com/npmania/bong/internal/bong"
 	hg "github.com/npmania/bong/internal/htmlgen"
 )
+
+var bongs []bong.Bong
 
 type HttpServer struct {
 	Port        int
@@ -23,6 +27,7 @@ func (h HttpServer) Start() {
 	if !h.initialized {
 		h.initialize()
 	}
+	bongs, _ = bong.LoadBongs("bongs/duckduckgo-v260.yaml")
 	http.HandleFunc("/search", search)
 
 	addr := ":" + strconv.Itoa(h.Port)
@@ -42,6 +47,9 @@ func search(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query = r.FormValue("q")
+	if string(query[0]) == "!" {
+		bongRedirect(w, r, query[1:])
+	}
 
 	data := hg.SearchParams{
 		Title: "bong",
@@ -52,4 +60,15 @@ func search(w http.ResponseWriter, r *http.Request) {
 	if err := hg.Search(w, data); err != nil {
 		fmt.Println(err)
 	}
+}
+
+// TODO: add error handling
+func bongRedirect(w http.ResponseWriter, r *http.Request, query string) error {
+	splited := strings.Split(query, " ")
+	bongus := splited[0]
+	url := bong.FindBong(bongs, bongus).BongUrl
+	target := fmt.Sprintf(url, strings.Join(splited[1:], " "))
+	fmt.Printf("redirecting to %s\n", target)
+	http.Redirect(w, r, target, http.StatusMovedPermanently)
+	return nil
 }
