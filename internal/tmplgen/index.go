@@ -1,4 +1,4 @@
-package htmlgen
+package tmplgen
 
 import (
 	"html/template"

@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/npmania/bong/internal/bong"
-	hg "github.com/npmania/bong/internal/htmlgen"
+	hg "github.com/npmania/bong/internal/tmplgen"
 )
 
 var bongs []bong.Bong
