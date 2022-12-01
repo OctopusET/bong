@@ -1,6 +1,4 @@
-%YAML 1.2
----
 Title: Bong
-# Prefix: '!'
-# Base URL: https://example.org/
-# Port: 1441
+Base URL: http://localhost:1441
+Port: 1441
+Default Prefix: '!'
