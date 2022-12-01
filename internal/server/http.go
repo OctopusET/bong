@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/npmania/bong/internal/bong"
+	"github.com/npmania/bong/internal/config"
 	"github.com/npmania/bong/internal/server/handlers"
 )
 
@@ -24,17 +25,26 @@ func (h HttpServer) Start() {
 	if !h.initialized {
 		h.initialize()
 	}
+
+	config, err := config.LoadConfig()
+	if err != nil {
+		panic(err)
+	}
+
 	bongs, _ := bong.LoadBongs("bongs/duckduckgo-v260.yaml")
 
-	indexHandler := handlers.IndexHandler{}
+	indexHandler := handlers.IndexHandler{Config: config}
 	searchHandler := handlers.SearchHandler{
-		Bongs: bongs,
+		Config: config,
+		Bongs:  bongs,
 	}
+	OpenSearchHandler := handlers.OpenSearchHandler{Config: config}
 
 	mux := http.NewServeMux()
 
 	mux.Handle("/", indexHandler)
 	mux.Handle("/search", searchHandler)
+	mux.Handle("/opensearch.xml", OpenSearchHandler)
 
 	addr := ":" + strconv.Itoa(h.Port)
 

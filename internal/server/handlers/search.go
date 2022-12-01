@@ -6,11 +6,13 @@ import (
 	"strings"
 
 	"github.com/npmania/bong/internal/bong"
+	"github.com/npmania/bong/internal/config"
 	tg "github.com/npmania/bong/internal/tmplgen"
 )
 
 type SearchHandler struct {
-	Bongs []bong.Bong
+	Config config.Config
+	Bongs  []bong.Bong
 }
 
 func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -22,7 +24,7 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query = r.FormValue("q")
-	if string(query[0]) == "!" {
+	if strings.HasPrefix(string(query[0]), h.Config.DefaultPrefix) {
 		h.bongRedirect(w, r, query[1:])
 	}
 
