@@ -6,7 +6,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func loadBongs(name string) ([]Bong, error) {
+func LoadBongs(name string) ([]Bong, error) {
 	if _, err := os.Stat(name); err != nil {
 		return nil, err
 	}
