@@ -1,7 +1,7 @@
 package duck
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -26,7 +26,7 @@ func Fetch() (string, error) {
 		return "", err
 	}
 
-	respData, err := ioutil.ReadAll(r.Body)
+	respData, err := io.ReadAll(r.Body)
 	if err != nil {
 		return "", err
 	}
@@ -56,7 +56,7 @@ func latestBangAddr() string {
 		}
 		defer r.Body.Close()
 
-		respData, err := ioutil.ReadAll(r.Body)
+		respData, err := io.ReadAll(r.Body)
 		if err != nil {
 			panic(err)
 		}
