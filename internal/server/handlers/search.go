@@ -24,8 +24,10 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query = r.FormValue("q")
-	if strings.HasPrefix(string(query[0]), h.Config.DefaultPrefix) {
-		h.bongRedirect(w, r, query[1:])
+	if strings.HasPrefix(string(query), h.Config.DefaultPrefix) {
+		if ok := h.bongRedirect(w, r, query[len(h.Config.DefaultPrefix):]); ok {
+			return
+		}
 	}
 
 	data := tg.SearchParams{
@@ -39,13 +41,17 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// TODO: add error handling
-func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, query string) error {
+func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, query string) bool {
 	splited := strings.Split(query, " ")
 	bongus := splited[0]
-	url := sh.BongMap[bongus].BongUrl
-	target := fmt.Sprintf(url, strings.Join(splited[1:], " "))
+
+	b, ok := sh.BongMap[bongus]
+	if !ok {
+		return false
+	}
+
+	target := fmt.Sprintf(b.BongUrl, strings.Join(splited[1:], " "))
 	fmt.Printf("redirecting to %s\n", target)
 	http.Redirect(w, r, target, http.StatusMovedPermanently)
-	return nil
+	return true
 }
