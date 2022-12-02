@@ -35,8 +35,8 @@ func (h HttpServer) Start() {
 
 	indexHandler := handlers.IndexHandler{Config: config}
 	searchHandler := handlers.SearchHandler{
-		Config: config,
-		Bongs:  bongs,
+		Config:  config,
+		BongMap: bongs,
 	}
 	OpenSearchHandler := handlers.OpenSearchHandler{Config: config}
 

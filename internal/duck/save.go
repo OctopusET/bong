@@ -16,8 +16,8 @@ func grabDuckBangs() ([]DuckBang, error) {
 }
 
 func saveAsBong(name string, bangs []DuckBang) error {
-	bongs := toBongs(bangs)
-	return bong.SaveBongs(name, bongs)
+	bm := toBongMap(bangs)
+	return bong.SaveBongs(name, bm)
 }
 
 func UpdateBangs() error {

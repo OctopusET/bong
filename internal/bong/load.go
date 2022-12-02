@@ -6,7 +6,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func LoadBongs(name string) ([]Bong, error) {
+func LoadBongs(name string) (BongMap, error) {
 	if _, err := os.Stat(name); err != nil {
 		return nil, err
 	}
@@ -16,10 +16,10 @@ func LoadBongs(name string) ([]Bong, error) {
 		return nil, err
 	}
 
-	bongCol := BongCollection{}
-	if err = yaml.Unmarshal(raw, &bongCol); err != nil {
+	bongMap := make(BongMap)
+	if err = yaml.Unmarshal(raw, &bongMap); err != nil {
 		return nil, err
 	}
 
-	return bongCol.toBongs(), nil
+	return bongMap, nil
 }

@@ -11,8 +11,8 @@ import (
 )
 
 type SearchHandler struct {
-	Config config.Config
-	Bongs  []bong.Bong
+	Config  config.Config
+	BongMap bong.BongMap
 }
 
 func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +43,7 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, query string) error {
 	splited := strings.Split(query, " ")
 	bongus := splited[0]
-	url := bong.FindBong(sh.Bongs, bongus).BongUrl
+	url := sh.BongMap[bongus].BongUrl
 	target := fmt.Sprintf(url, strings.Join(splited[1:], " "))
 	fmt.Printf("redirecting to %s\n", target)
 	http.Redirect(w, r, target, http.StatusMovedPermanently)

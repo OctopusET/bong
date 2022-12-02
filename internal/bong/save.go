@@ -7,10 +7,9 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func SaveBongs(name string, bongs []Bong) error {
+func SaveBongs(name string, bm BongMap) error {
 	makeBongDir()
-	bongCol := toCollection(bongs)
-	yamlBong, err := yaml.Marshal(bongCol)
+	yamlBong, err := yaml.Marshal(bm)
 	if err != nil {
 		return err
 	}

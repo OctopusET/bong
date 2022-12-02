@@ -33,16 +33,17 @@ func fixBangs(bangs []DuckBang) (fixed []DuckBang) {
 	return
 }
 
-func toBongs(bangs []DuckBang) (bongs []bong.Bong) {
+func toBongMap(bangs []DuckBang) bong.BongMap {
 	fixed := fixBangs(bangs)
+	bm := make(bong.BongMap)
+
 	for _, bang := range fixed {
-		b := bong.Bong{
+		bm[bang.Bang] = bong.Bong{
 			Title:   bang.Title,
 			MainUrl: bang.MainUrl,
 			BongUrl: bang.BangUrl,
 			Bongus:  bang.Bang,
 		}
-		bongs = append(bongs, b)
 	}
-	return
+	return bm
 }
