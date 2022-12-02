@@ -15,20 +15,20 @@ type HttpServer struct {
 	initialized bool
 }
 
-func (h *HttpServer) initialize() {
+func (h *HttpServer) initialize(cfg config.Config) {
 	if h.Port == 0 {
-		h.Port = 1441
+		h.Port = cfg.Port
 	}
 }
 
 func (h HttpServer) Start() {
-	if !h.initialized {
-		h.initialize()
-	}
-
 	config, err := config.LoadConfig()
 	if err != nil {
 		panic(err)
+	}
+
+	if !h.initialized {
+		h.initialize(config)
 	}
 
 	bongs, _ := bong.LoadBongs("bongs/duckduckgo-v260.yaml")
