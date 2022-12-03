@@ -14,7 +14,7 @@ func init() {
 
 var tohttpsCmd = &cobra.Command{
 	Use:   "tohttps [files]",
-	Short: "fix http urls to https if supported",
+	Short: "Fix http urls to https if supported",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) > 0 {
 			tohttps.FilesToHttps(args)

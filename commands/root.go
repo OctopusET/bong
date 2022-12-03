@@ -10,7 +10,7 @@ import (
 
 var RootCmd = &cobra.Command{
 	Use:   "bong",
-	Short: "configurable search engine redirector",
+	Short: "Configurable search engine redirector",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			fmt.Println(cmd.UsageString())
