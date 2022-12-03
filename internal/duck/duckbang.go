@@ -29,7 +29,7 @@ func fixBangs(bangs []DuckBang) (fixed []DuckBang) {
 			b.Title = b.Title[1:]
 		}
 		b.BangUrl, _ = url.QueryUnescape(b.BangUrl)
-		b.BangUrl = strings.Replace(b.BangUrl, "{{{s}}}", "%s", 1)
+		b.BangUrl = strings.ReplaceAll(b.BangUrl, "{{{s}}}", "%[1]s")
 		b.MainUrl = "http://" + b.MainUrl
 		fixed = append(fixed, b)
 	}
