@@ -42,15 +42,24 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, query string) bool {
+	var realQuery string
 	splited := strings.Split(query, " ")
 	bongus := splited[0]
 
 	b, ok := sh.BongMap[bongus]
-	if !ok {
+	if !ok && sh.Config.Fallback == "" {
 		return false
+	} else if sh.Config.Fallback != "" {
+		b, ok = sh.BongMap[sh.Config.Fallback]
+		if !ok {
+			return false
+		}
+		realQuery = strings.Join(splited, " ")
+	} else {
+		realQuery = strings.Join(splited[1:], " ")
 	}
 
-	target := fmt.Sprintf(b.BongUrl, strings.Join(splited[1:], " "))
+	target := fmt.Sprintf(b.BongUrl, realQuery)
 	fmt.Printf("redirecting to %s\n", target)
 	http.Redirect(w, r, target, http.StatusMovedPermanently)
 	return true

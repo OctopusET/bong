@@ -2,3 +2,4 @@ Title: Bong
 Base URL: http://localhost:1441
 Port: 1441
 Default Prefix: '!'
+# Fallback: ddg

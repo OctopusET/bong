@@ -15,6 +15,7 @@ type Config struct {
 	BaseUrl       string `yaml:"Base URL"`
 	Port          int    `yaml:"Port"`
 	DefaultPrefix string `yaml:"Default Prefix"`
+	Fallback      string `yaml:"Fallback,omitempty"`
 }
 
 func CopyIfNotExists() error {
