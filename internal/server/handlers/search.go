@@ -24,10 +24,8 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	query = r.FormValue("q")
-	if strings.HasPrefix(string(query), h.Config.DefaultPrefix) {
-		if ok := h.bongRedirect(w, r, query); ok {
-			return
-		}
+	if ok := h.bongRedirect(w, r, query); ok {
+		return
 	}
 
 	data := tg.SearchParams{
@@ -36,8 +34,10 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Printf("%s %s %+v\n", r.Method, r.URL, r.Form)
-	if err := tg.Search(w, data); err != nil {
-		fmt.Println(err)
+	if h.Config.Fallback == "" {
+		if err := tg.Search(w, data); err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
@@ -45,10 +45,13 @@ func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, que
 	var (
 		realQuery string
 		target    string
+		bongus    string
 	)
 
 	splited := strings.Split(query, " ")
-	bongus := splited[0][len(sh.Config.DefaultPrefix):]
+	if strings.HasPrefix(string(query), sh.Config.DefaultPrefix) {
+		bongus = splited[0][len(sh.Config.DefaultPrefix):]
+	}
 
 	b, ok := sh.BongMap[bongus]
 
