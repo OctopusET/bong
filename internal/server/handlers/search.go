@@ -25,7 +25,7 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	query = r.FormValue("q")
 	if strings.HasPrefix(string(query), h.Config.DefaultPrefix) {
-		if ok := h.bongRedirect(w, r, query[len(h.Config.DefaultPrefix):]); ok {
+		if ok := h.bongRedirect(w, r, query); ok {
 			return
 		}
 	}
@@ -44,17 +44,20 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, query string) bool {
 	var realQuery string
 	splited := strings.Split(query, " ")
-	bongus := splited[0]
+	bongus := splited[0][len(sh.Config.DefaultPrefix):]
 
 	b, ok := sh.BongMap[bongus]
-	if !ok && sh.Config.Fallback == "" {
-		return false
-	} else if sh.Config.Fallback != "" {
-		b, ok = sh.BongMap[sh.Config.Fallback]
-		if !ok {
+
+	if !ok {
+		if sh.Config.Fallback == "" {
 			return false
+		} else if sh.Config.Fallback != "" {
+			b, ok = sh.BongMap[sh.Config.Fallback]
+			if !ok {
+				return false
+			}
+			realQuery = strings.Join(splited, " ")
 		}
-		realQuery = strings.Join(splited, " ")
 	} else {
 		realQuery = strings.Join(splited[1:], " ")
 	}
