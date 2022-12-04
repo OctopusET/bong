@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"github.com/npmania/bong/internal/bong"
+	log "github.com/sirupsen/logrus"
 )
 
 func FilesToHttps(files []string) {
@@ -20,27 +21,28 @@ func FilesToHttps(files []string) {
 }
 
 func fileToHttps(filename string) {
-	fi, err := os.Stat(filename)
+	_, err := os.Stat(filename)
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Printf("file %s does not exist. skipping...\n", filename)
+			log.Warnf("file %s does not exist. skipping...\n", filename)
 			return
 		} else {
-			fmt.Printf("failed loading file %s: error %s\n", filename, err.Error())
+			log.Warnf("failed loading file %s: error %s\n", filename, err.Error())
 		}
 	}
 
-	newFilename := fi.Name() + "_httpsfixed" + filepath.Ext(filename)
+	ext := filepath.Ext(filename)
+	newFilename := filename[:len(filename)-len(ext)] + "_httpsfixed" + ext
 
 	bm, err := bong.LoadBongs(filename)
 	if err != nil {
-		fmt.Printf("failed reading yaml from %s: error %s\n", filename, err.Error())
+		log.Warnf("failed loading yaml from %s: error %s\n", filename, err.Error())
 		return
 	}
 
 	var wg sync.WaitGroup
 
-	semaphore := make(chan bool, 50)
+	semaphore := make(chan bool, 5)
 
 	bongs := bm.ToSlice()
 	shuffle(bongs)
