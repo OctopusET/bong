@@ -4,15 +4,24 @@ import (
 	"os"
 	"strings"
 
+	"github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
 
-func LoadBongs(name string) (BongMap, error) {
-	if _, err := os.Stat(name); err != nil {
+func LoadBongs(filename string) (BongMap, error) {
+	logrus.WithFields(logrus.Fields{
+		"filename": filename,
+	}).Info("loading bong from file")
+
+	if _, err := os.Stat(filename); err != nil {
+		logrus.WithFields(logrus.Fields{
+			"filename": filename,
+			"error":    err,
+		}).Error("failed file lookup")
 		return nil, err
 	}
 
-	raw, err := os.ReadFile(name)
+	raw, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -24,6 +33,7 @@ func LoadBongs(name string) (BongMap, error) {
 
 	for bg := range bongMap {
 		b := bongMap[bg]
+		b.MainUrl = strings.ReplaceAll(bongMap[bg].BongUrl, "%s", "%[1]s")
 		b.BongUrl = strings.ReplaceAll(bongMap[bg].BongUrl, "%s", "%[1]s")
 		bongMap[bg] = b
 	}
