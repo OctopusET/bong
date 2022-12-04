@@ -30,6 +30,6 @@ func UpdateBangs() error {
 		return err
 	}
 
-	filename := fmt.Sprintf("brave-%s.yaml", time.Now().Format(timeFormat))
+	filename := fmt.Sprintf("bongs/brave-%s.yaml", time.Now().Format(timeFormat))
 	return saveAsBong(filename, bangs)
 }

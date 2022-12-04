@@ -27,6 +27,6 @@ func UpdateBangs() error {
 		return err
 	}
 
-	filename := fmt.Sprintf("duckduckgo-v%d.yaml", bf.latestVersion())
+	filename := fmt.Sprintf("bongs/duckduckgo-v%d.yaml", bf.latestVersion())
 	return saveAsBong(filename, bangs)
 }
