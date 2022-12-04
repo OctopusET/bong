@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/npmania/bong/internal/bong"
 )
@@ -28,6 +29,7 @@ func hasInternetConnection() bool {
 }
 
 func shuffle(bongs []bong.Bong) {
+	rand.Seed(time.Now().UnixNano())
 	for i := range bongs {
 		j := rand.Intn(i + 1)
 		bongs[i], bongs[j] = bongs[j], bongs[i]
