@@ -37,6 +37,7 @@ func fixBangs(bangs []cowBang) error {
 			return err
 		}
 
+		bangs[i].Meta.Hostname = strings.ReplaceAll(bangs[i].Meta.Hostname, "{query}", "%s")
 		bangs[i].BangUrl = strings.ReplaceAll(bangs[i].BangUrl, "{query}", "%s")
 	}
 
