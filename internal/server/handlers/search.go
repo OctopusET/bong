@@ -34,10 +34,8 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Printf("%s %s %+v\n", r.Method, r.URL, r.Form)
-	if h.Config.Fallback == "" {
-		if err := tg.Search(w, data); err != nil {
-			fmt.Println(err)
-		}
+	if err := tg.Search(w, data); err != nil {
+		fmt.Println(err)
 	}
 }
 
