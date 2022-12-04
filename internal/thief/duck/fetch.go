@@ -39,8 +39,8 @@ func (bf bangFetcher) fetch() ([]byte, error) {
 func (bf bangFetcher) latestVersion() int {
 	bangAddr := bf.latestBangAddr()
 
-	verString := bangAddr[7:]
-	verString = verString[:len(verString)-3]
+	verString := bangAddr[len(duck+"/bang.v"):]
+	verString = verString[:len(verString)-len(".js")]
 
 	version, err := strconv.Atoi(verString)
 	if err != nil {
