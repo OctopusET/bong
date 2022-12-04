@@ -8,7 +8,7 @@ import (
 	"github.com/npmania/bong/internal/bong"
 )
 
-type DuckBang struct {
+type duckBang struct {
 	Category     string `json:"c"`
 	MainUrl      string `json:"d"`
 	SomeWeirdNum int    `json:"r"`
@@ -18,12 +18,12 @@ type DuckBang struct {
 	BangUrl      string `json:"u"`
 }
 
-func parseRawBang(raw []byte) (bangs []DuckBang, err error) {
+func parseRawBang(raw []byte) (bangs []duckBang, err error) {
 	err = json.Unmarshal(raw, &bangs)
 	return
 }
 
-func fixBangs(bangs []DuckBang) (fixed []DuckBang, err error) {
+func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 	for _, b := range bangs {
 		if string(b.Title[0]) == " " {
 			b.Title = b.Title[1:]
@@ -49,7 +49,7 @@ func fixBangs(bangs []DuckBang) (fixed []DuckBang, err error) {
 	return
 }
 
-func toBongMap(bangs []DuckBang) (bong.BongMap, error) {
+func toBongMap(bangs []duckBang) (bong.BongMap, error) {
 	fixed, err := fixBangs(bangs)
 	if err != nil {
 		return nil, err

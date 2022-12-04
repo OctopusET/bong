@@ -6,7 +6,7 @@ import (
 	"github.com/npmania/bong/internal/bong"
 )
 
-func saveAsBong(name string, bangs []DuckBang) error {
+func saveAsBong(name string, bangs []duckBang) error {
 	bm, err := toBongMap(bangs)
 	if err != nil {
 		return err
