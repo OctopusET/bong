@@ -23,32 +23,40 @@ func parseBang(raw []byte) (bangs []duckBang, err error) {
 	return
 }
 
-func fixBangs(bangs []duckBang) (err error) {
-	for i := range bangs {
-		if string(bangs[i].Title[0]) == " " {
-			bangs[i].Title = bangs[i].Title[1:]
+func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
+	for _, b := range bangs {
+		if string(b.Title[0]) == " " {
+			b.Title = b.Title[1:]
 		}
 
-		bangs[i].MainUrl, err = url.QueryUnescape(bangs[i].MainUrl)
+		// skip duckduckgo site:%s bangs
+		if string(b.Title[0]) == "/" {
+			continue
+		}
+
+		b.MainUrl, err = url.QueryUnescape(b.MainUrl)
 		if err != nil {
-			return
+			return nil, err
 		}
 
-		bangs[i].BangUrl, err = url.QueryUnescape(bangs[i].BangUrl)
+		b.BangUrl, err = url.QueryUnescape(b.BangUrl)
 		if err != nil {
-			return
+			return nil, err
 		}
 
-		bangs[i].MainUrl = strings.ReplaceAll(bangs[i].MainUrl, "{{{s}}}", "%s")
-		bangs[i].BangUrl = strings.ReplaceAll(bangs[i].BangUrl, "{{{s}}}", "%s")
+		b.MainUrl = strings.ReplaceAll(b.MainUrl, "{{{s}}}", "%s")
+		b.BangUrl = strings.ReplaceAll(b.BangUrl, "{{{s}}}", "%s")
 
-		bangs[i].MainUrl = "http://" + bangs[i].MainUrl
+		b.MainUrl = "http://" + b.MainUrl
+
+		fixed = append(fixed, b)
 	}
-	return
+
+	return fixed, nil
 }
 
 func toBongMap(bangs []duckBang) (bong.BongMap, error) {
-	err := fixBangs(bangs)
+	bangs, err := fixBangs(bangs)
 	if err != nil {
 		return nil, err
 	}

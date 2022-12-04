@@ -28,24 +28,24 @@ func parseBang(raw []byte) (bangs []cowBang, err error) {
 	return
 }
 
-func fixBangs(bangs []cowBang) error {
-	var err error
-
-	for i := range bangs {
-		bangs[i].BangUrl, err = url.QueryUnescape(bangs[i].BangUrl)
+func fixBangs(bangs []cowBang) (fixed []cowBang, err error) {
+	for _, b := range bangs {
+		b.BangUrl, err = url.QueryUnescape(b.BangUrl)
 		if err != nil {
-			return err
+			return nil, err
 		}
 
-		bangs[i].Meta.Hostname = strings.ReplaceAll(bangs[i].Meta.Hostname, "{query}", "%s")
-		bangs[i].BangUrl = strings.ReplaceAll(bangs[i].BangUrl, "{query}", "%s")
+		b.Meta.Hostname = strings.ReplaceAll(b.Meta.Hostname, "{query}", "%s")
+		b.BangUrl = strings.ReplaceAll(b.BangUrl, "{query}", "%s")
+
+		fixed = append(fixed, b)
 	}
 
-	return nil
+	return fixed, nil
 }
 
 func toBongMap(bangs []cowBang) (bong.BongMap, error) {
-	err := fixBangs(bangs)
+	bangs, err := fixBangs(bangs)
 	if err != nil {
 		return nil, err
 	}
