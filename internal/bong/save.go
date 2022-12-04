@@ -14,7 +14,7 @@ func SaveBongs(name string, bm BongMap) error {
 
 	for bg := range bm {
 		b := bm[bg]
-		b.MainUrl = strings.ReplaceAll(b.BongUrl, "%[1]s", "%s")
+		b.MainUrl = strings.ReplaceAll(b.MainUrl, "%[1]s", "%s")
 		b.BongUrl = strings.ReplaceAll(b.BongUrl, "%[1]s", "%s")
 		bm[bg] = b
 	}
