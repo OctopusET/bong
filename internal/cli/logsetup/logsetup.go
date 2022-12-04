@@ -26,7 +26,7 @@ func initLogrus(w io.Writer, lv string) error {
 
 	log.WithFields(log.Fields{
 		"LogLevel": l,
-	}).Info("Log level has been set")
+	}).Debug("Log level has been set")
 
 	return nil
 }
