@@ -22,7 +22,7 @@ func UpdateBangs() error {
 		return err
 	}
 
-	bangs, err := parseRawBang(rawBang)
+	bangs, err := parseBang(rawBang)
 	if err != nil {
 		return err
 	}

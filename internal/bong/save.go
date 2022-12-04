@@ -3,6 +3,7 @@ package bong
 import (
 	"os"
 	"path/filepath"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -10,6 +11,12 @@ import (
 func SaveBongs(name string, bm BongMap) error {
 	if err := bm.validate(); err != nil {
 		return err
+	}
+
+	for bg := range bm {
+		b := bm[bg]
+		b.BongUrl = strings.ReplaceAll(b.BongUrl, "%[1]s", "%s")
+		bm[bg] = b
 	}
 
 	makeBongDir()
