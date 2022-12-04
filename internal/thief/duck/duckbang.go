@@ -29,9 +29,9 @@ func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 			b.Title = b.Title[1:]
 		}
 
-		// skip duckduckgo site:%s bangs
-		if string(b.Title[0]) == "/" {
-			continue
+		// add duckduckgo address to self redirected bangs
+		if string(b.BangUrl[0]) == "/" {
+			b.BangUrl = duck + b.BangUrl
 		}
 
 		b.MainUrl, err = url.QueryUnescape(b.MainUrl)
