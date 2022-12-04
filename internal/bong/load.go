@@ -4,17 +4,17 @@ import (
 	"os"
 	"strings"
 
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v3"
 )
 
 func LoadBongs(filename string) (BongMap, error) {
-	logrus.WithFields(logrus.Fields{
+	log.WithFields(log.Fields{
 		"filename": filename,
 	}).Info("loading bong from file")
 
 	if _, err := os.Stat(filename); err != nil {
-		logrus.WithFields(logrus.Fields{
+		log.WithFields(log.Fields{
 			"filename": filename,
 			"error":    err,
 		}).Error("failed file lookup")

@@ -3,7 +3,7 @@ package commands
 import (
 	"github.com/npmania/bong/internal/cli/logsetup"
 	"github.com/npmania/bong/internal/thief/coward"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
 
@@ -18,7 +18,7 @@ var cowardCmd = &cobra.Command{
 	PersistentPreRunE: logsetup.LoggerSetup,
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := coward.UpdateBangs(); err != nil {
-			logrus.WithField("error", err).Error("Failed to update bangs")
+			log.WithField("error", err).Error("Failed to update bangs")
 		}
 	},
 }
