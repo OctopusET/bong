@@ -21,5 +21,9 @@ func LoadBongs(name string) (BongMap, error) {
 		return nil, err
 	}
 
+	if err = bongMap.validate(); err != nil {
+		return nil, err
+	}
+
 	return bongMap, nil
 }

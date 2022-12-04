@@ -8,6 +8,10 @@ import (
 )
 
 func SaveBongs(name string, bm BongMap) error {
+	if err := bm.validate(); err != nil {
+		return err
+	}
+
 	makeBongDir()
 	yamlBong, err := yaml.Marshal(bm)
 	if err != nil {
