@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/npmania/bong/internal/duck"
+	"github.com/npmania/bong/internal/thief/duck"
 	"github.com/spf13/cobra"
 )
 
