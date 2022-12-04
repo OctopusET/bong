@@ -2,7 +2,6 @@ package bong
 
 import (
 	"os"
-	"path/filepath"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -26,7 +25,7 @@ func SaveBongs(name string, bm BongMap) error {
 		return err
 	}
 
-	bongPath := filepath.Join("bongs", name)
+	bongPath := name
 	return os.WriteFile(bongPath, yamlBong, 0600)
 }
 
