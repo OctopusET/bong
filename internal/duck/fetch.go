@@ -15,13 +15,15 @@ const (
 )
 
 var (
-	bangVersionResp string
-
 	bangAddrRegexp, _ = regexp.Compile(bangAddrExpr)
 )
 
-func fetch() ([]byte, error) {
-	r, err := http.Get(duck + latestBangAddr())
+type bangFetcher struct {
+	bangVersionResp string
+}
+
+func (bf bangFetcher) fetch() ([]byte, error) {
+	r, err := http.Get(bf.latestBangAddr())
 	if err != nil {
 		return nil, err
 	}
@@ -34,8 +36,8 @@ func fetch() ([]byte, error) {
 	return respData, nil
 }
 
-func latestBangVersion() int {
-	bangAddr := latestBangAddr()
+func (bf bangFetcher) latestVersion() int {
+	bangAddr := bf.latestBangAddr()
 
 	verString := bangAddr[7:]
 	verString = verString[:len(verString)-3]
@@ -48,8 +50,8 @@ func latestBangVersion() int {
 	return version
 }
 
-func latestBangAddr() string {
-	if bangVersionResp == "" {
+func (bf *bangFetcher) latestBangAddr() string {
+	if bf.bangVersionResp == "" {
 		r, err := http.Get(duck + bangVersionUrl)
 		if err != nil {
 			panic(err)
@@ -61,8 +63,8 @@ func latestBangAddr() string {
 			panic(err)
 		}
 
-		bangVersionResp = string(respData)
+		bf.bangVersionResp = string(respData)
 	}
 
-	return bangAddrRegexp.FindString(bangVersionResp)
+	return duck + bangAddrRegexp.FindString(bf.bangVersionResp)
 }

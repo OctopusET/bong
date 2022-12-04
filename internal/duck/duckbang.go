@@ -23,14 +23,21 @@ func parseRawBang(raw []byte) (bangs []DuckBang, err error) {
 	return
 }
 
-func fixBangs(bangs []DuckBang) (fixed []DuckBang) {
+func fixBangs(bangs []DuckBang) (fixed []DuckBang, err error) {
 	for _, b := range bangs {
 		if string(b.Title[0]) == " " {
 			b.Title = b.Title[1:]
 		}
 
-		b.MainUrl, _ = url.QueryUnescape(b.MainUrl)
-		b.BangUrl, _ = url.QueryUnescape(b.BangUrl)
+		b.MainUrl, err = url.QueryUnescape(b.MainUrl)
+		if err != nil {
+			return nil, err
+		}
+
+		b.BangUrl, err = url.QueryUnescape(b.BangUrl)
+		if err != nil {
+			return nil, err
+		}
 
 		b.MainUrl = strings.ReplaceAll(b.MainUrl, "{{{s}}}", "%[1]s")
 		b.BangUrl = strings.ReplaceAll(b.BangUrl, "{{{s}}}", "%[1]s")
@@ -42,8 +49,12 @@ func fixBangs(bangs []DuckBang) (fixed []DuckBang) {
 	return
 }
 
-func toBongMap(bangs []DuckBang) bong.BongMap {
-	fixed := fixBangs(bangs)
+func toBongMap(bangs []DuckBang) (bong.BongMap, error) {
+	fixed, err := fixBangs(bangs)
+	if err != nil {
+		return nil, err
+	}
+
 	bm := make(bong.BongMap)
 
 	for _, bang := range fixed {
@@ -54,5 +65,6 @@ func toBongMap(bangs []DuckBang) bong.BongMap {
 			Bongus:  bang.Bang,
 		}
 	}
-	return bm
+
+	return bm, nil
 }

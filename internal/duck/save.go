@@ -6,27 +6,27 @@ import (
 	"github.com/npmania/bong/internal/bong"
 )
 
-func grabDuckBangs() ([]DuckBang, error) {
-	rawBang, err := fetch()
-	if err != nil {
-		return nil, err
-	}
-
-	return parseRawBang(rawBang)
-}
-
 func saveAsBong(name string, bangs []DuckBang) error {
-	bm := toBongMap(bangs)
+	bm, err := toBongMap(bangs)
+	if err != nil {
+		return err
+	}
 	return bong.SaveBongs(name, bm)
 }
 
 func UpdateBangs() error {
-	//TODO: check version before you grab bangs
-	bangs, err := grabDuckBangs()
+	bf := new(bangFetcher)
+
+	rawBang, err := bf.fetch()
 	if err != nil {
 		return err
 	}
 
-	filename := fmt.Sprintf("duckduckgo-v%d.yaml", latestBangVersion())
+	bangs, err := parseRawBang(rawBang)
+	if err != nil {
+		return err
+	}
+
+	filename := fmt.Sprintf("duckduckgo-v%d.yaml", bf.latestVersion())
 	return saveAsBong(filename, bangs)
 }

@@ -21,16 +21,20 @@ func FilesToHttps(files []string) {
 
 func fileToHttps(filename string) {
 	fi, err := os.Stat(filename)
-	if os.IsNotExist(err) {
-		fmt.Printf("file %s does not exist. skipping...\n", filename)
-		return
+	if err != nil {
+		if os.IsNotExist(err) {
+			fmt.Printf("file %s does not exist. skipping...\n", filename)
+			return
+		} else {
+			fmt.Printf("failed loading file %s: error %s\n", filename, err.Error())
+		}
 	}
 
 	newFilename := fi.Name() + "_httpsfixed" + filepath.Ext(filename)
 
 	bm, err := bong.LoadBongs(filename)
 	if err != nil {
-		fmt.Printf("failed loading file %s, skipping...\n", filename)
+		fmt.Printf("failed reading yaml from %s: error %s\n", filename, err.Error())
 		return
 	}
 
@@ -55,7 +59,9 @@ func fileToHttps(filename string) {
 	}
 	wg.Wait()
 
-	bong.SaveBongs(newFilename, bong.SliceToBongMap(bongs))
+	if err = bong.SaveBongs(newFilename, bong.SliceToBongMap(bongs)); err != nil {
+		fmt.Printf("failed saving file %s: %s", newFilename, err)
+	}
 }
 
 func bongToHttps(b *bong.Bong) {

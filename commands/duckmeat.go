@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/npmania/bong/internal/duck"
 	"github.com/spf13/cobra"
 )
@@ -13,6 +15,8 @@ var duckmeatCmd = &cobra.Command{
 	Use:   "duckmeat",
 	Short: "Download bangs from duckduckgo",
 	Run: func(cmd *cobra.Command, args []string) {
-		duck.UpdateBangs()
+		if err := duck.UpdateBangs(); err != nil {
+			fmt.Println("error while updating bangs:", err.Error())
+		}
 	},
 }
