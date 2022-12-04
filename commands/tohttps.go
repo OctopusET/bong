@@ -10,7 +10,7 @@ import (
 )
 
 func init() {
-	tohttpsCmd.PersistentFlags().StringVarP(&logsetup.LogLevel, "loglevel", "v", "warn", "Log level (debug, info, warn, error, fatal, panic")
+	tohttpsCmd.PersistentFlags().StringVarP(&logsetup.LogLevel, "loglevel", "v", "info", "Log level (debug, info, warn, error, fatal, panic")
 	RootCmd.AddCommand(tohttpsCmd)
 }
 

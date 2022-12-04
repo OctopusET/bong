@@ -24,19 +24,16 @@ func fileToHttps(filename string) {
 	_, err := os.Stat(filename)
 	if err != nil {
 		if os.IsNotExist(err) {
-			log.Warnf("file %s does not exist. skipping...\n", filename)
+			log.Warnf("File %s does not exist. skipping...", filename)
 			return
 		} else {
-			log.Warnf("failed loading file %s: error %s\n", filename, err.Error())
+			log.WithField("filename", filename).Errorln("Failed loading file:", err.Error())
 		}
 	}
 
-	ext := filepath.Ext(filename)
-	newFilename := filename[:len(filename)-len(ext)] + "_httpsfixed" + ext
-
 	bm, err := bong.LoadBongs(filename)
 	if err != nil {
-		log.Warnf("failed loading yaml from %s: error %s\n", filename, err.Error())
+		log.WithField("filename", filename).Errorln("Failed loading yaml:", err.Error())
 		return
 	}
 
@@ -53,7 +50,11 @@ func fileToHttps(filename string) {
 
 		b := &bongs[bg]
 		go func() {
-			bongToHttps(b)
+			err := bongToHttps(b)
+			if err != nil {
+				log.WithField("bong", b).Errorln("Failed to check bong:", err)
+				os.Exit(1)
+			}
 			<-semaphore
 
 			wg.Done()
@@ -61,14 +62,17 @@ func fileToHttps(filename string) {
 	}
 	wg.Wait()
 
+	ext := filepath.Ext(filename)
+	newFilename := filename[:len(filename)-len(ext)] + "_httpsfixed" + ext
+
 	if err = bong.SaveBongs(newFilename, bong.SliceToBongMap(bongs)); err != nil {
-		fmt.Printf("failed saving file %s: %s", newFilename, err)
+		log.WithField("filename", newFilename).Errorln("Failed to save file:", err.Error())
 	}
 }
 
-func bongToHttps(b *bong.Bong) {
+func bongToHttps(b *bong.Bong) error {
 	if strings.HasPrefix(b.MainUrl, "https://") && strings.HasPrefix(b.BongUrl, "https://") {
-		return
+		return nil
 	}
 
 	mUrl, bUrl := b.MainUrl, b.BongUrl
@@ -78,14 +82,23 @@ func bongToHttps(b *bong.Bong) {
 	}
 	bUrl = fmt.Sprintf(bUrl, "randomterm")
 
-	if httpsSupported(mUrl) {
+	mUrlSupported, err := httpsSupported(mUrl)
+	if err != nil {
+		return err
+	}
+
+	if mUrlSupported {
 		b.MainUrl = urlToHttps(b.MainUrl)
 	} else {
 		b.MainUrl = urlToHttp(b.MainUrl)
 	}
 
 	if strings.Split(mUrl, "/")[0] != strings.Split(bUrl, "/")[0] {
-		if httpsSupported(bUrl) {
+		bUrlSupported, err := httpsSupported(bUrl)
+		if err != nil {
+			return err
+		}
+		if bUrlSupported {
 			b.BongUrl = urlToHttps(b.BongUrl)
 		} else {
 			b.BongUrl = urlToHttp(b.BongUrl)
@@ -95,4 +108,6 @@ func bongToHttps(b *bong.Bong) {
 	} else {
 		b.BongUrl = urlToHttp(b.BongUrl)
 	}
+
+	return nil
 }

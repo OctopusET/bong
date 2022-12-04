@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/npmania/bong/internal/bong"
+	log "github.com/sirupsen/logrus"
 )
 
 const timeFormat = "2006-01-02-15:04:05"
@@ -31,5 +32,11 @@ func UpdateBangs() error {
 	}
 
 	filename := fmt.Sprintf("bongs/brave-%s.yaml", time.Now().Format(timeFormat))
-	return saveAsBong(filename, bangs)
+	err = saveAsBong(filename, bangs)
+	if err != nil {
+		return err
+	}
+
+	log.Infof("Saved latest Brave Search bang to %s", filename)
+	return nil
 }

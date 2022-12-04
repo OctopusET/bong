@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/npmania/bong/internal/bong"
+	log "github.com/sirupsen/logrus"
 )
 
 func saveAsBong(name string, bangs []duckBang) error {
@@ -28,5 +29,12 @@ func UpdateBangs() error {
 	}
 
 	filename := fmt.Sprintf("bongs/duckduckgo-v%d.yaml", bf.latestVersion())
-	return saveAsBong(filename, bangs)
+
+	err = saveAsBong(filename, bangs)
+	if err != nil {
+		return err
+	}
+
+	log.Infof("Saved latest Duckduckgo bang to %s", filename)
+	return nil
 }

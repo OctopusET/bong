@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	startCmd.PersistentFlags().StringVarP(&logsetup.LogLevel, "loglevel", "v", "warn", "Log level (debug, info, warn, error, fatal, panic")
+	startCmd.PersistentFlags().StringVarP(&logsetup.LogLevel, "loglevel", "v", "info", "Log level (debug, info, warn, error, fatal, panic")
 	RootCmd.AddCommand(startCmd)
 }
 
