@@ -2,6 +2,7 @@ package duck
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/npmania/bong/internal/bong"
 	log "github.com/sirupsen/logrus"
@@ -28,7 +29,7 @@ func UpdateBangs() error {
 		return err
 	}
 
-	filename := fmt.Sprintf("bongs/duckduckgo-v%d.yaml", bf.latestVersion())
+	filename := filepath.Join("bongs", fmt.Sprintf("duckduckgo-v%d.yaml", bf.latestVersion()))
 
 	err = saveAsBong(filename, bangs)
 	if err != nil {

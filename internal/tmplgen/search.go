@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 type SearchParams struct {
@@ -14,7 +15,9 @@ type SearchParams struct {
 
 func Search(w io.Writer, p SearchParams) error {
 	fmt.Println("data got:", p.Query)
-	fs := os.DirFS("templates/default/")
+
+	path := filepath.Join("templates", "default")
+	fs := os.DirFS(path)
 
 	t, err := template.New("layout.html").ParseFS(fs, "layout.html", "search.html")
 	if err != nil {

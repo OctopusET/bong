@@ -3,6 +3,7 @@ package tmplgen
 import (
 	"io"
 	"os"
+	"path/filepath"
 	"text/template"
 )
 
@@ -14,7 +15,8 @@ type OpenSearchParams struct {
 }
 
 func OpenSearch(w io.Writer, p OpenSearchParams) error {
-	fs := os.DirFS("templates/common/")
+	path := filepath.Join("templates", "common")
+	fs := os.DirFS(path)
 	t, err := template.New("opensearch.xml").ParseFS(fs, "opensearch.xml")
 	if err != nil {
 		return err

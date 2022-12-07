@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"io"
 	"os"
+	"path/filepath"
 )
 
 type IndexParams struct {
@@ -11,7 +12,8 @@ type IndexParams struct {
 }
 
 func Index(w io.Writer, p IndexParams) error {
-	fs := os.DirFS("templates/default/")
+	path := filepath.Join("templates/default")
+	fs := os.DirFS(path)
 	t, err := template.New("layout.html").ParseFS(fs, "layout.html", "index.html")
 	if err != nil {
 		return err

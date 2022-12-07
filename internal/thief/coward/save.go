@@ -2,13 +2,14 @@ package coward
 
 import (
 	"fmt"
+	"path/filepath"
 	"time"
 
 	"github.com/npmania/bong/internal/bong"
 	log "github.com/sirupsen/logrus"
 )
 
-const timeFormat = "2006-01-02-15:04:05"
+const timeFormat = "20060102150405"
 
 func saveAsBong(name string, bangs []cowBang) error {
 	bm, err := toBongMap(bangs)
@@ -31,7 +32,7 @@ func UpdateBangs() error {
 		return err
 	}
 
-	filename := fmt.Sprintf("bongs/brave-%s.yaml", time.Now().Format(timeFormat))
+	filename := filepath.Join("bongs", fmt.Sprintf("brave-%s.yaml", time.Now().Format(timeFormat)))
 	err = saveAsBong(filename, bangs)
 	if err != nil {
 		return err
