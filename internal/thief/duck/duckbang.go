@@ -34,13 +34,15 @@ func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 
 		// add duckduckgo address to self redirected bangs
 		if string(b.BangUrl[0]) == "/" {
-			// Main URL of self redirected ones is sometimes empty
 			b.BangUrl = duck + b.BangUrl
 		}
 
-		// deal with main url on site: queries
-		if strings.Contains(b.BangUrl, "site%3A") || strings.Contains(b.BangUrl, "site:") {
-			b.MainUrl = strings.Replace(b.BangUrl, "{{{s}}}", "", 1)
+		if strings.HasPrefix(b.BangUrl, duck) {
+			if b.BangUrl == duck+"/newbang" {
+				b.MainUrl = b.BangUrl
+			} else {
+				b.MainUrl = strings.Replace(b.BangUrl, "{{{s}}}", "", 1)
+			}
 		}
 
 		b.MainUrl, err = url.QueryUnescape(b.MainUrl)
