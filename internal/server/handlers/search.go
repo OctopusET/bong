@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"net/http"
+	"net/url"
 	"strings"
 
 	"github.com/npmania/bong/internal/bong"
@@ -67,12 +68,14 @@ func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, que
 		realQuery = strings.Join(splited[1:], " ")
 	}
 
+	realQuery = url.QueryEscape(realQuery)
+
 	if realQuery != "" {
 		target = fmt.Sprintf(b.BongUrl, realQuery)
 	} else {
 		target = fmt.Sprintf(b.MainUrl)
 	}
-	fmt.Printf("redirecting to %s\n", target)
+
 	http.Redirect(w, r, target, http.StatusMovedPermanently)
 	return true
 }
