@@ -32,6 +32,7 @@ func CopyIfNotExists() error {
 		}
 	}
 
+	log.Info("config.yaml does not exist. Copied example config")
 	return nil
 }
 
@@ -42,7 +43,6 @@ func LoadConfig() (Config, error) {
 	if err := CopyIfNotExists(); err != nil {
 		return Config{}, err
 	}
-	log.Info("config.yaml does not exist. Copied example config")
 
 	raw, err := os.ReadFile(filename)
 	if err != nil {
