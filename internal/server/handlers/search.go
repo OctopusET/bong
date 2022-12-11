@@ -72,6 +72,9 @@ func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, que
 
 	if realQuery != "" && strings.Contains(b.BongUrl, "%[1]s") {
 		target = fmt.Sprintf(b.BongUrl, realQuery)
+
+		// TODO: fix hacky way of unescaping percent mark
+		target = strings.ReplaceAll(target, "%", "%25")
 	} else {
 		target = b.MainUrl
 	}

@@ -80,7 +80,12 @@ func bongToHttps(b *bong.Bong) error {
 	if strings.Contains(mUrl, "%") {
 		mUrl = fmt.Sprintf(mUrl, "randomterm")
 	}
-	bUrl = fmt.Sprintf(bUrl, "randomterm")
+	if strings.Contains(bUrl, "%") {
+		bUrl = fmt.Sprintf(bUrl, "randomterm")
+	}
+
+	// TODO: fix hacky way of unescaping percent mark
+	bUrl = strings.ReplaceAll(bUrl, "%", "%25")
 
 	mUrlSupported, err := httpsSupported(mUrl)
 	if err != nil {
