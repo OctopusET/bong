@@ -28,14 +28,19 @@ func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 		if string(b.Title[0]) == " " {
 			b.Title = b.Title[1:]
 		}
+		if string(b.Title[len(b.Title)-1]) == " " {
+			b.Title = b.Title[:len(b.Title)-1]
+		}
 
 		// add duckduckgo address to self redirected bangs
 		if string(b.BangUrl[0]) == "/" {
 			// Main URL of self redirected ones is sometimes empty
 			b.BangUrl = duck + b.BangUrl
-			if b.MainUrl == "" {
-				b.MainUrl = strings.Replace(b.BangUrl, "{{{s}}}", "", 1)
-			}
+		}
+
+		// deal with main url on site: queries
+		if strings.Contains(b.BangUrl, "site%3A") || strings.Contains(b.BangUrl, "site:") {
+			b.MainUrl = strings.Replace(b.BangUrl, "{{{s}}}", "", 1)
 		}
 
 		b.MainUrl, err = url.QueryUnescape(b.MainUrl)
