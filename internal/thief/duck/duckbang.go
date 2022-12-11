@@ -52,9 +52,6 @@ func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 		if err != nil {
 			return nil, err
 		}
-		b.MainUrl = strings.ReplaceAll(b.MainUrl, "%", "%%")
-		b.BangUrl = strings.ReplaceAll(b.BangUrl, "%", "%%")
-
 		b.MainUrl = strings.ReplaceAll(b.MainUrl, "{{{s}}}", "%s")
 		b.BangUrl = strings.ReplaceAll(b.BangUrl, "{{{s}}}", "%s")
 
