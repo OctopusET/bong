@@ -33,7 +33,7 @@ func LoadBongs(filename string) (BongMap, error) {
 
 	for bg := range bongMap {
 		b := bongMap[bg]
-		b.MainUrl = strings.ReplaceAll(bongMap[bg].BongUrl, "%s", "%[1]s")
+		b.MainUrl = strings.ReplaceAll(bongMap[bg].MainUrl, "%s", "%[1]s")
 		b.BongUrl = strings.ReplaceAll(bongMap[bg].BongUrl, "%s", "%[1]s")
 		bongMap[bg] = b
 	}
