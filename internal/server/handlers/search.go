@@ -70,7 +70,7 @@ func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, que
 
 	realQuery = url.QueryEscape(realQuery)
 
-	if realQuery != "" && strings.Contains(b.BongUrl, "%s") {
+	if realQuery != "" && strings.Contains(b.BongUrl, "%[1]s") {
 		target = fmt.Sprintf(b.BongUrl, realQuery)
 	} else {
 		target = b.MainUrl
