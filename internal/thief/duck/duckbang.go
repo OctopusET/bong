@@ -34,7 +34,7 @@ func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 			// Main URL of self redirected ones is sometimes empty
 			b.BangUrl = duck + b.BangUrl
 			if b.MainUrl == "" {
-				b.MainUrl = strings.Replace(b.BangUrl, "{{{s}}} ", "", 1)
+				b.MainUrl = strings.Replace(b.BangUrl, "{{{s}}}", "", 1)
 			}
 		}
 
