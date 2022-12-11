@@ -30,9 +30,9 @@ func CopyIfNotExists() error {
 		if err = os.WriteFile(filename, data, 0600); err != nil {
 			return fmt.Errorf("failed writing to %s: %s", filename, err.Error())
 		}
+		log.Info("config.yaml does not exist. Copied example config")
 	}
 
-	log.Info("config.yaml does not exist. Copied example config")
 	return nil
 }
 
