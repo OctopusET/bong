@@ -70,10 +70,10 @@ func (sh SearchHandler) bongRedirect(w http.ResponseWriter, r *http.Request, que
 
 	realQuery = url.QueryEscape(realQuery)
 
-	if realQuery != "" {
+	if realQuery != "" && strings.Contains(b.BongUrl, "%s") {
 		target = fmt.Sprintf(b.BongUrl, realQuery)
 	} else {
-		target = fmt.Sprintf(b.MainUrl)
+		target = b.MainUrl
 	}
 
 	http.Redirect(w, r, target, http.StatusMovedPermanently)

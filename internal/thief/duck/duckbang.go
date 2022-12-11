@@ -31,7 +31,11 @@ func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 
 		// add duckduckgo address to self redirected bangs
 		if string(b.BangUrl[0]) == "/" {
+			// Main URL of self redirected ones is sometimes empty
 			b.BangUrl = duck + b.BangUrl
+			if b.MainUrl == "" {
+				b.MainUrl = strings.Replace(b.BangUrl, "{{{s}}} ", "", 1)
+			}
 		}
 
 		b.MainUrl, err = url.QueryUnescape(b.MainUrl)
@@ -43,11 +47,15 @@ func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 		if err != nil {
 			return nil, err
 		}
+		b.MainUrl = strings.ReplaceAll(b.MainUrl, "%", "%%")
+		b.BangUrl = strings.ReplaceAll(b.BangUrl, "%", "%%")
 
 		b.MainUrl = strings.ReplaceAll(b.MainUrl, "{{{s}}}", "%s")
 		b.BangUrl = strings.ReplaceAll(b.BangUrl, "{{{s}}}", "%s")
 
-		b.MainUrl = "http://" + b.MainUrl
+		if !strings.HasPrefix(b.MainUrl, "http://") && !strings.HasPrefix(b.MainUrl, "https://") {
+			b.MainUrl = "http://" + b.MainUrl
+		}
 
 		fixed = append(fixed, b)
 	}
