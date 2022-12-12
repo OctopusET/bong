@@ -8,7 +8,7 @@ import (
 
 	"github.com/npmania/bong/internal/bong"
 	"github.com/npmania/bong/internal/config"
-	tg "github.com/npmania/bong/internal/tmplgen"
+	tg "github.com/npmania/bong/internal/server/tmplgen"
 )
 
 type SearchHandler struct {

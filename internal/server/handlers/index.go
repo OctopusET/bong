@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/npmania/bong/internal/config"
-	tg "github.com/npmania/bong/internal/tmplgen"
+	tg "github.com/npmania/bong/internal/server/tmplgen"
 )
 
 type IndexHandler struct {
