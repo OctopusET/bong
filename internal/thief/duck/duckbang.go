@@ -57,7 +57,7 @@ func fixBangs(bangs []duckBang) (fixed []duckBang, err error) {
 
 		// in case percent mark is in path
 		// TODO: fix hacky way of unescaping percent mark
-		b.BangUrl = strings.ReplaceAll(b.BangUrl, "%", "%%")
+		b.BangUrl = strings.ReplaceAll(b.BangUrl, "%", "%%25")
 
 		b.MainUrl = strings.ReplaceAll(b.MainUrl, "{{{s}}}", "%s")
 		b.BangUrl = strings.ReplaceAll(b.BangUrl, "{{{s}}}", "%s")
