@@ -34,7 +34,6 @@ func (h SearchHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Query: query,
 	}
 
-	fmt.Printf("%s %s %+v\n", r.Method, r.URL, r.Form)
 	if err := tg.Search(w, data); err != nil {
 		fmt.Println(err)
 	}

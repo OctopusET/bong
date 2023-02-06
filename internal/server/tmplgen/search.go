@@ -14,8 +14,6 @@ type SearchParams struct {
 }
 
 func Search(w io.Writer, p SearchParams) error {
-	fmt.Println("data got:", p.Query)
-
 	path := filepath.Join("templates", "default")
 	fs := os.DirFS(path)
 
