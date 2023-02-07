@@ -1,7 +1,6 @@
 package tmplgen
 
 import (
-	"fmt"
 	"html/template"
 	"io"
 	"os"
