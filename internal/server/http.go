@@ -31,7 +31,7 @@ func (h HttpServer) Start() {
 		h.initialize(config)
 	}
 
-	bongs, _ := bong.LoadBongs("bongs/duckduckgo-v260.yaml")
+	bongs, _ := bong.LoadBongs(config.BongFile)
 
 	indexHandler := handlers.IndexHandler{Config: config}
 	searchHandler := handlers.SearchHandler{

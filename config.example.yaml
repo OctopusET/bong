@@ -1,5 +1,6 @@
 Title: Bong
 Base URL: http://localhost:1441
+Bong File: bongs/duckduckgo-v260.yaml
 Port: 1441
 Default Prefix: '!'
 # Fallback: ddg

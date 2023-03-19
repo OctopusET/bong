@@ -15,6 +15,7 @@ const filename = "config.yaml"
 type Config struct {
 	Title         string `yaml:"Title"`
 	BaseUrl       string `yaml:"Base URL"`
+	BongFile      string `yaml:"Bong File"`
 	Port          int    `yaml:"Port"`
 	DefaultPrefix string `yaml:"Default Prefix"`
 	Fallback      string `yaml:"Fallback,omitempty"`
